@@ -9,8 +9,10 @@ export class AppRoot {
 
   @State() state: any = {};
 
+  modal:HTMLIonModalElement;
+
   async openModal(withList: boolean = false) {
-    let modal = await modalController.create({
+    this.modal = await modalController.create({
       component: 'app-home',
       handle: false,
       backdropDismiss: true,
@@ -21,12 +23,12 @@ export class AppRoot {
         withList
       }
     });
-    modal.onDidDismiss().then(() => {
-      this.openModal(withList);
-    });
 
-    await modal.present();
-    setTimeout(() => modal.dismiss(), 300);
+    await this.modal.present();
+  }
+
+  async closeModal() {
+    this.modal.dismiss();
   }
 
   render() {
@@ -41,6 +43,7 @@ export class AppRoot {
           <ion-list></ion-list>
           <ion-button expand="block" onClick={() => this.openModal()}>Run Working</ion-button>
           <ion-button expand="block" onClick={() => this.openModal(true)}>Run Broken</ion-button>
+          <ion-button expand="block" onClick={() => this.closeModal()}>Close Modal</ion-button>
         </main>
       </div>
     );
